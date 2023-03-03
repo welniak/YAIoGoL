@@ -1,10 +1,7 @@
 package ui.composable
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Slider
@@ -67,14 +64,14 @@ fun SettingsPanel(
     onGridSizeChanged: (Int) -> Unit
 ) {
     LazyColumn(
-        modifier = Modifier.width(400.dp)
+        modifier = Modifier.width(400.dp).padding(start = 8.dp)
     ) {
         item {
             Text(
                 "Settings",
                 color = MaterialTheme.colors.primaryVariant,
                 fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(vertical = 10.dp, horizontal = 10.dp)
+                modifier = Modifier.padding(vertical = 20.dp, horizontal = 10.dp)
             )
         }
         item {
@@ -87,21 +84,14 @@ fun SettingsPanel(
             ) { newValue -> onGenerationDurationChanged((newValue * 1000L).toLong()) }
         }
         item {
-            TextButton(
-                onClick = onStartPauseButtonClicked,
-            ) {
-                Text(
-                    if (gameStatus == GameStatus.Started) "Pause" else "Start"
-                )
-            }
-        }
-        item {
-            TextButton(
-                onClick = onStopButtonClicked,
-                enabled = gameStatus == GameStatus.Started || gameStatus == GameStatus.Paused
-            ) {
-                Text("Stop")
-            }
+            PropertySlider(
+                initialValue = gridSize.toFloat(),
+                minValue = MinGridSize.toFloat(),
+                maxValue = MaxGridSize.toFloat(),
+                "Grid size",
+                enabled = gameStatus == GameStatus.Initial,
+                selectedValueLabelFormatter = { "${it.toInt()}x${it.toInt()} "}
+            ) { newValue -> onGridSizeChanged(newValue.toInt()) }
         }
         item {
             TextButton(
@@ -127,14 +117,22 @@ fun SettingsPanel(
             }
         }
         item {
-            PropertySlider(
-                initialValue = gridSize.toFloat(),
-                minValue = MinGridSize.toFloat(),
-                maxValue = MaxGridSize.toFloat(),
-                "Grid size",
-                enabled = gameStatus == GameStatus.Initial,
-                selectedValueLabelFormatter = { "${it.toInt()}x${it.toInt()} "}
-            ) { newValue -> onGridSizeChanged(newValue.toInt()) }
+            Row {
+                TextButton(
+                    onClick = onStartPauseButtonClicked,
+                ) {
+                    Text(
+                        if (gameStatus == GameStatus.Started) "Pause" else "Start"
+                    )
+                }
+                TextButton(
+                    onClick = onStopButtonClicked,
+                    enabled = gameStatus == GameStatus.Started || gameStatus == GameStatus.Paused
+                ) {
+                    Text("Stop")
+                }
+            }
+
         }
     }
 }
