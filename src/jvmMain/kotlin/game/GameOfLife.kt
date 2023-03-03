@@ -55,10 +55,7 @@ class GameOfLife(
     }
 
     fun resurrectOrKill(cellPosition: Grid.Position) {
-        if (cellPosition.x >= gameState.grid.size ||
-            cellPosition.y >= gameState.grid.size ||
-            cellPosition.x < 0 ||
-            cellPosition.y < 0) return
+        if (cellPosition.isOutOfBounds) return
 
         val nextGrid = gameState.grid.copy().apply {
             cells[cellPosition.y][cellPosition.x] = Cell(
@@ -92,4 +89,10 @@ class GameOfLife(
         return (cell.isAlive && numberOfAliveNeighbours in (2..3)
                 || cell.isAlive.not() && numberOfAliveNeighbours == 3)
     }
+
+    private val Grid.Position.isOutOfBounds
+        get() = x >= gameState.grid.size ||
+                y >= gameState.grid.size ||
+                x < 0 ||
+                y < 0
 }
