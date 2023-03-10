@@ -9,29 +9,7 @@ data class GameState(
     val generationDuration: Duration,
     val gameStatus: GameStatus,
     val grid: Grid
-) {
-    companion object {
-        fun emptyGame(
-            generationDuration: Duration,
-            gridSize: Int
-        ) = GameState(
-            generation = 0,
-            generationDuration = generationDuration,
-            gameStatus = GameStatus.Initial,
-            grid = Grid.empty(gridSize)
-        )
-
-        fun randomGame(
-            generationDuration: Duration,
-            gridSize: Int
-        ) = GameState(
-            generation = 0,
-            generationDuration = generationDuration,
-            gameStatus = GameStatus.Initial,
-            grid = Grid.random(gridSize)
-        )
-    }
-}
+)
 
 val DefaultGenerationDuration = 1.seconds
 val MinGenerationDuration = 30.milliseconds

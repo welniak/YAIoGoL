@@ -1,9 +1,6 @@
 package game
 
-import game.model.Cell
-import game.model.GameState
-import game.model.GameStatus
-import game.model.Grid
+import game.model.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -18,6 +15,7 @@ import kotlin.time.Duration
 // 4. Any dead cell with exactly three live neighbours becomes a live cell, as if by reproduction.
 class GameOfLife(
     private val scope: CoroutineScope,
+    private val gridFactory: GridFactory,
     initialGameState: GameState
 ) {
 
@@ -70,10 +68,10 @@ class GameOfLife(
 
     private suspend fun updateGrid() {
         val currentGrid = gameState.grid
-        val nextGrid = Grid.empty(currentGrid.size)
+        val nextGrid = gridFactory.emptyGrid(currentGrid.size)
         currentGrid.cells.forEachIndexed { y, row ->
             row.forEachIndexed { x, cell ->
-                val numberOfAliveNeighbours = currentGrid.numberOfAliveNeighbours(Grid.Position(x, y))
+                val numberOfAliveNeighbours = currentGrid.numberOfLiveNeighbours(Grid.Position(x, y))
                 nextGrid.cells[y][x] = Cell(
                     isAlive = cellAliveInNextIteration(cell, numberOfAliveNeighbours)
                 )

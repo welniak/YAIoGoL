@@ -5,11 +5,14 @@ data class Grid(val cells: Array<Array<Cell>>) {
     @JvmField
     val size = cells.size
 
-    fun numberOfAliveNeighbours(cellPosition: Position): Int {
+    fun numberOfLiveNeighbours(cellPosition: Position): Int {
         return neighboursOf(cellPosition).count { it.isAlive }
     }
 
     private fun neighboursOf(cellPosition: Position): List<Cell> {
+        if (cellPosition.x < 0 || cellPosition.y < 0 || cellPosition.x > cells.size || cellPosition.y > cells.size)
+            return emptyList()
+
         val hasTopNeighbours = cellPosition.y > 0
         val hasBottomNeighbours = cellPosition.y < cells.size - 1
         val hasLeftNeighbours = cellPosition.x > 0
@@ -40,30 +43,9 @@ data class Grid(val cells: Array<Array<Cell>>) {
         }
     }
 
-    override fun equals(other: Any?) = other != null && other is Grid && cells.contentEquals(other.cells)
+    override fun equals(other: Any?) = other is Grid && cells.contentDeepEquals(other.cells)
 
     override fun hashCode() = cells.contentDeepHashCode()
 
     data class Position(val x: Int, val y: Int)
-
-    companion object {
-        fun random(size: Int): Grid {
-            val aliveCellsPercentage = Math.random()
-            return Grid(
-                cells = Array(size) { _ ->
-                    Array(size) { _ ->
-                        Cell(isAlive = Math.random() < aliveCellsPercentage)
-                    }
-                }
-            )
-        }
-
-        fun empty(size: Int) = Grid(
-            cells = Array(size) { _ ->
-                Array(size) { _ ->
-                    Cell(isAlive = false)
-                }
-            }
-        )
-    }
 }

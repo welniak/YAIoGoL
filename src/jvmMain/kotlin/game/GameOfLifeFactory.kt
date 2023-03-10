@@ -1,10 +1,13 @@
 package game
 
+import game.model.GameStateFactory
 import kotlinx.coroutines.CoroutineScope
-import game.model.GameState
+import game.model.GridFactoryImpl
 import kotlin.time.Duration
 
 class GameOfLifeFactory(
+    private val gameStateFactory: GameStateFactory,
+    private val gridFactory: GridFactoryImpl,
     private val coroutineScope: CoroutineScope
 ) {
 
@@ -13,7 +16,8 @@ class GameOfLifeFactory(
         gridSize: Int
     ) = GameOfLife(
         coroutineScope,
-        GameState.emptyGame(generationDuration, gridSize)
+        gridFactory,
+        gameStateFactory.emptyGameState(generationDuration, gridSize)
     )
 
     fun randomGame(
@@ -21,6 +25,7 @@ class GameOfLifeFactory(
         gridSize: Int
     ) = GameOfLife(
         coroutineScope,
-        GameState.randomGame(generationDuration, gridSize)
+        gridFactory,
+        gameStateFactory.randomGameState(generationDuration, gridSize)
     )
 }

@@ -29,7 +29,18 @@ kotlin {
                 implementation(compose.desktop.currentOs)
             }
         }
-        val jvmTest by getting
+        val jvmTest by getting {
+            dependencies {
+                implementation("org.jetbrains.kotlin:kotlin-test")
+                implementation("org.junit.jupiter:junit-jupiter:5.9.2")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test")
+            }
+
+            tasks.withType<Test> {
+                useJUnitPlatform()
+            }
+        }
     }
 }
 

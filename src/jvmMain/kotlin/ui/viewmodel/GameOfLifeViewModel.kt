@@ -4,28 +4,26 @@ import androidx.compose.ui.geometry.Offset
 import ui.composable.CellSize
 import game.GameOfLife
 import game.GameOfLifeFactory
+import game.model.*
 import ui.model.ClickPosition
-import game.model.DefaultGenerationDuration
-import game.model.DefaultGridSize
-import game.model.GameStatus
-import game.model.Grid
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
-import ui.model.GameUiState
+import ui.model.GameUiStateFactory
 import ui.model.PivotPointPosition
 import kotlin.time.DurationUnit
 import kotlin.time.toDuration
 
 class GameOfLifeViewModel(
     private val gameFactory: GameOfLifeFactory,
-    private val coroutineScope: CoroutineScope
+    private val coroutineScope: CoroutineScope,
+    gameUiStateFactory: GameUiStateFactory
 ) {
 
-    val gameUiStateFlow = MutableStateFlow(GameUiState.initial())
+    val gameUiStateFlow = MutableStateFlow(gameUiStateFactory.initialState())
 
     private val gameUiState
         get() = gameUiStateFlow.value
