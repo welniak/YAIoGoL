@@ -1,12 +1,12 @@
 import androidx.compose.ui.window.application
 import ui.composable.Application
-import game.GameOfLifeFactory
+import game.GameOfLifeFactoryImpl
 import game.model.GameStateFactoryImpl
 import game.model.GridFactoryImpl
 import game.util.RandomNumberGeneratorImpl
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import ui.model.GameUiStateFactory
+import ui.model.GameUiStateFactoryImpl
 import ui.viewmodel.GameOfLifeViewModel
 
 fun main() {
@@ -15,8 +15,8 @@ fun main() {
     val randomStateGenerator = RandomNumberGeneratorImpl()
     val gridFactory = GridFactoryImpl(randomStateGenerator)
     val gameStateFactory = GameStateFactoryImpl(gridFactory)
-    val gameFactory = GameOfLifeFactory(gameStateFactory, gridFactory, gameScope)
-    val gameUiStateFactory = GameUiStateFactory(gameStateFactory)
+    val gameFactory = GameOfLifeFactoryImpl(gameStateFactory, gameScope)
+    val gameUiStateFactory = GameUiStateFactoryImpl(gameStateFactory)
     val viewModel = GameOfLifeViewModel(gameFactory, viewModelScope, gameUiStateFactory)
 
     application {

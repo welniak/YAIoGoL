@@ -2,30 +2,38 @@ package game
 
 import game.model.GameStateFactory
 import kotlinx.coroutines.CoroutineScope
-import game.model.GridFactoryImpl
 import kotlin.time.Duration
 
-class GameOfLifeFactory(
-    private val gameStateFactory: GameStateFactory,
-    private val gridFactory: GridFactoryImpl,
-    private val coroutineScope: CoroutineScope
-) {
-
+interface GameOfLifeFactory {
     fun emptyGame(
         generationDuration: Duration,
         gridSize: Int
-    ) = GameOfLife(
-        coroutineScope,
-        gridFactory,
-        gameStateFactory.emptyGameState(generationDuration, gridSize)
-    )
+    ): GameOfLife
 
     fun randomGame(
         generationDuration: Duration,
         gridSize: Int
+    ): GameOfLife
+}
+
+class GameOfLifeFactoryImpl(
+    private val gameStateFactory: GameStateFactory,
+    private val coroutineScope: CoroutineScope
+) : GameOfLifeFactory {
+
+    override fun emptyGame(
+        generationDuration: Duration,
+        gridSize: Int
     ) = GameOfLife(
         coroutineScope,
-        gridFactory,
+        gameStateFactory.emptyGameState(generationDuration, gridSize)
+    )
+
+    override fun randomGame(
+        generationDuration: Duration,
+        gridSize: Int
+    ) = GameOfLife(
+        coroutineScope,
         gameStateFactory.randomGameState(generationDuration, gridSize)
     )
 }

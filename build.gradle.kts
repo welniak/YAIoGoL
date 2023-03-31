@@ -35,6 +35,7 @@ kotlin {
                 implementation("org.junit.jupiter:junit-jupiter:5.9.2")
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test")
+                implementation("app.cash.turbine:turbine:0.12.1")
             }
 
             tasks.withType<Test> {

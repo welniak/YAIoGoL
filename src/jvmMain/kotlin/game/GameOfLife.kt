@@ -1,11 +1,8 @@
 package game
 
 import game.model.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.launch
 import kotlin.time.Duration
 
 // The rules of the game:
@@ -15,7 +12,6 @@ import kotlin.time.Duration
 // 4. Any dead cell with exactly three live neighbours becomes a live cell, as if by reproduction.
 class GameOfLife(
     private val scope: CoroutineScope,
-    private val gridFactory: GridFactory,
     initialGameState: GameState
 ) {
 
@@ -55,28 +51,29 @@ class GameOfLife(
     fun resurrectOrKill(cellPosition: Grid.Position) {
         if (cellPosition.isOutOfBounds) return
 
-        val nextGrid = gameState.grid.copy().apply {
-            cells[cellPosition.y][cellPosition.x] = Cell(
-                isAlive = cells[cellPosition.y][cellPosition.x].isAlive.not()
-            )
-        }
-
-        gameStateFlow.tryEmit(
-            gameState.copy(grid = nextGrid, generation = gameState.generation + 1)
+        val nextGrid = gameState.grid.copy(
+            cells = gameState.grid.cells.toMutableList().apply {
+                this[cellPosition.y] = gameState.grid.cells[cellPosition.y].toMutableList().apply {
+                    this[cellPosition.x] = Cell(
+                        isAlive = gameState.grid.cells[cellPosition.y][cellPosition.x].isAlive.not()
+                    )
+                }
+            }
         )
+
+        gameStateFlow.tryEmit(gameState.copy(grid = nextGrid))
     }
 
     private suspend fun updateGrid() {
         val currentGrid = gameState.grid
-        val nextGrid = gridFactory.emptyGrid(currentGrid.size)
-        currentGrid.cells.forEachIndexed { y, row ->
-            row.forEachIndexed { x, cell ->
-                val numberOfAliveNeighbours = currentGrid.numberOfLiveNeighbours(Grid.Position(x, y))
-                nextGrid.cells[y][x] = Cell(
-                    isAlive = cellAliveInNextIteration(cell, numberOfAliveNeighbours)
-                )
+        val nextGrid = currentGrid.copy(
+            cells = currentGrid.cells.mapIndexed { y, row ->
+                row.mapIndexed { x, cell ->
+                    val numberOfAliveNeighbours = currentGrid.numberOfLiveNeighbours(Grid.Position(x, y))
+                    Cell(isAlive = cellAliveInNextIteration(cell, numberOfAliveNeighbours))
+                }
             }
-        }
+        )
 
         gameStateFlow.emit(
             gameState.copy(generation = gameState.generation + 1, grid = nextGrid)

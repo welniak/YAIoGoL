@@ -1,6 +1,6 @@
 package game.model
 
-data class Grid(val cells: Array<Array<Cell>>) {
+data class Grid(val cells: List<List<Cell>>) {
 
     @JvmField
     val size = cells.size
@@ -42,10 +42,6 @@ data class Grid(val cells: Array<Array<Cell>>) {
             if (hasBottomNeighbours) add(cells[rowBelow][currentColumn])
         }
     }
-
-    override fun equals(other: Any?) = other is Grid && cells.contentDeepEquals(other.cells)
-
-    override fun hashCode() = cells.contentDeepHashCode()
 
     data class Position(val x: Int, val y: Int)
 }

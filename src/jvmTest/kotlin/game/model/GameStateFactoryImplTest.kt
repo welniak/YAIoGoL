@@ -1,5 +1,6 @@
 package game.model
 
+import fakes.FakeGridFactory
 import game.util.RandomNumberGeneratorImpl
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
@@ -24,15 +25,8 @@ class GameStateFactoryImplTest {
 
     @Test
     fun `should create random game state with right grid size and generation duration`() {
-        val expectedGrid = Grid(arrayOf(arrayOf(Cell(isAlive = true))))
-        val gridFactory = object : GridFactory {
-            var gridSize = 0
-            override fun emptyGrid(size: Int) = throw NotImplementedError()
-            override fun randomGrid(size: Int): Grid {
-                gridSize = size
-                return expectedGrid
-            }
-        }
+        val expectedGrid = Grid(listOf(listOf(Cell(isAlive = true))))
+        val gridFactory = FakeGridFactory(randomGrid = expectedGrid)
         val gameStateFactory = GameStateFactoryImpl(gridFactory)
 
         val actualRandomGameState = gameStateFactory.randomGameState(generationDuration, GridSize)

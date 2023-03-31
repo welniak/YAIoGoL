@@ -10,8 +10,8 @@ interface GridFactory {
 class GridFactoryImpl(private val randomNumberGenerator: RandomNumberGenerator) : GridFactory {
 
     override fun emptyGrid(size: Int) = Grid(
-        cells = Array(size) { _ ->
-            Array(size) { _ ->
+        cells = MutableList(size) { _ ->
+            MutableList(size) { _ ->
                 Cell(isAlive = false)
             }
         }
@@ -20,8 +20,8 @@ class GridFactoryImpl(private val randomNumberGenerator: RandomNumberGenerator) 
     override fun randomGrid(size: Int): Grid {
         val aliveCellsPercentage = randomNumberGenerator.nextDouble()
         return Grid(
-            cells = Array(size) { _ ->
-                Array(size) { _ ->
+            cells = MutableList(size) { _ ->
+                MutableList(size) { _ ->
                     Cell(isAlive = randomNumberGenerator.nextDouble() < aliveCellsPercentage)
                 }
             }
