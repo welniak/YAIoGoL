@@ -10,7 +10,8 @@ Read more about the Game of Life: https://en.wikipedia.org/wiki/Conway's_Game_of
 
 # How to run it
 
-Clone the code and run the `main` function in `src/jvmMain/kotlin/Main.kt` file.
+JVM: Clone the code and run the `./gradlew run` task.
+Wasm: Clone the code and run the `./gradlew wasmJsRun` task.
 
 # User manual
 

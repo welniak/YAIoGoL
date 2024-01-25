@@ -8,26 +8,25 @@ plugins {
 group = "com.welniak.gameoflife"
 version = "1.0"
 
-repositories {
-    google()
-    mavenCentral()
-    maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
-}
-
 kotlin {
-    jvm {
-        compilations.all {
-            kotlinOptions.jvmTarget = "11"
-        }
-        withJava()
+    jvm()
+
+    wasmJs {
+        browser()
+        binaries.executable()
     }
+
     sourceSets {
-        val jvmMain by getting {
-            dependencies {
-                implementation(compose.desktop.currentOs)
-            }
+        commonMain.dependencies {
+            implementation(compose.runtime)
+            implementation(compose.foundation)
+            implementation(compose.material3)
+            implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.0-RC2")
         }
-        val jvmTest by getting {
+        jvmMain.dependencies {
+            implementation(compose.desktop.currentOs)
+        }
+        jvmTest {
             dependencies {
                 implementation("org.jetbrains.kotlin:kotlin-test")
                 implementation("org.junit.jupiter:junit-jupiter:5.10.1")
@@ -52,4 +51,8 @@ compose.desktop {
             packageVersion = "1.0.0"
         }
     }
+}
+
+compose.experimental {
+    web.application {}
 }

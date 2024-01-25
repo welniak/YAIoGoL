@@ -1,12 +1,8 @@
 package ui.composable
 
-import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Slider
-import androidx.compose.material.Text
-import androidx.compose.material.TextButton
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -17,7 +13,6 @@ import kotlin.time.Duration
 import kotlin.time.DurationUnit
 
 @Composable
-@Preview
 fun PropertySlider(
     initialValue: Float,
     minValue: Float,
@@ -49,7 +44,6 @@ fun PropertySlider(
     }
 }
 
-@Preview
 @Composable
 fun SettingsPanel(
     generationDuration: Duration,
@@ -69,7 +63,7 @@ fun SettingsPanel(
         item {
             Text(
                 "Settings",
-                color = MaterialTheme.colors.primaryVariant,
+                color = MaterialTheme.colorScheme.primary,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(vertical = 20.dp, horizontal = 10.dp)
             )
@@ -80,7 +74,7 @@ fun SettingsPanel(
                 minValue = MinGenerationDuration.toDouble(DurationUnit.SECONDS).toFloat(),
                 maxValue = MaxGenerationDuration.toDouble(DurationUnit.SECONDS).toFloat(),
                 "Generation duration in s",
-                selectedValueLabelFormatter = { "%.2f".format(it) }
+                selectedValueLabelFormatter = { it.toString() }
             ) { newValue -> onGenerationDurationChanged((newValue * 1000L).toLong()) }
         }
         item {
