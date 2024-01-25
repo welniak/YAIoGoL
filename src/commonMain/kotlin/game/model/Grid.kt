@@ -1,5 +1,7 @@
 package game.model
 
+import kotlin.jvm.JvmField
+
 data class Grid(val cells: List<List<Cell>>) {
 
     @JvmField
